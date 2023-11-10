@@ -18,7 +18,7 @@ export const CHIPS_VALUE_ACCESSOR: any = {
                 <li #token *ngFor="let item of value; let i = index" class="p-chips-token" (click)="onItemClick($event, item)">
                     <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"></ng-container>
                     <span *ngIf="!itemTemplate" class="p-chips-token-label">{{ field ? resolveFieldData(item, field) : item }}</span>
-                    <span *ngIf="!disabled" class="p-chips-token-icon pi pi-times-circle" (click)="removeItem($event, i)"></span>
+                    <span *ngIf="!disabled" class="p-chips-token-icon pi pi-times" (click)="removeItem($event, i)"></span>
                 </li>
                 <li class="p-chips-input-token" [ngClass]="{ 'p-chips-clearable': showClear && !disabled }">
                     <input

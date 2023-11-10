@@ -23,7 +23,7 @@ let idx: number = 0;
                     [attr.aria-controls]="id + '-content'"
                     [attr.aria-expanded]="selected"
                 >
-                    <span [class]="iconClass" [ngClass]="selected ? accordion.collapseIcon : accordion.expandIcon"></span>
+                <span [class]="iconClass" [ngClass]="selected ? accordion.collapseIcon : accordion.expandIcon"></span>
                     <span class="p-accordion-header-text" *ngIf="!hasHeaderFacet">
                         {{ header }}
                     </span>

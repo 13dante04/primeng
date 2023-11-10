@@ -325,7 +325,7 @@ export class GalleriaContent implements DoCheck {
 
     @Output() activeItemChange: EventEmitter<any> = new EventEmitter();
 
-    id: string = this.galleria.id || UniqueComponentId();
+    id: string;
 
     _activeIndex: number = 0;
 
@@ -335,14 +335,17 @@ export class GalleriaContent implements DoCheck {
 
     styleClass: string;
 
-    private differ = this.differs.find(this.galleria).create();
+    private differ;
 
-    constructor(public galleria: Galleria, public cd: ChangeDetectorRef, private differs: KeyValueDiffers) {}
+    constructor(public galleria: Galleria, public cd: ChangeDetectorRef, private differs: KeyValueDiffers) {
+        this.id = this.galleria.id || UniqueComponentId();
+        this.differ = this.differs.find(this.galleria).create();
+    }
 
     ngDoCheck(): void {
         const changes = this.differ.diff(this.galleria as unknown as Record<string, unknown>);
 
-        if (changes?.forEachItem.length > 0) {
+        if (changes?.forEachItem?.length! > 0) {
             // Because we change the properties of the parent component,
             // and the children take our entity from the injector.
             // We can tell the children to redraw themselves when we change the properties of the parent component.
@@ -709,7 +712,7 @@ export class GalleriaThumbnails implements OnInit, AfterContentChecked, AfterVie
 
     startPos = null;
 
-    thumbnailsStyle = null;
+    thumbnailsStyle: HTMLStyleElement | null = null;
 
     sortedResponsiveOptions = null;
 

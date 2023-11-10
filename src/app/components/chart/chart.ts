@@ -82,7 +82,7 @@ export class UIChart implements AfterViewInit, OnDestroy {
         }
 
         this.chart = new Chart(this.el.nativeElement.children[0].children[0], {
-            type: this.type,
+            type: this.type as any,
             data: this.data,
             options: this.options,
             plugins: this.plugins

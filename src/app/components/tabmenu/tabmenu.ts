@@ -148,7 +148,7 @@ export class TabMenu implements AfterContentInit, AfterViewInit, AfterViewChecke
 
     forwardIsDisabled: boolean = false;
 
-    private timerIdForInitialAutoScroll: number | null = null;
+    private timerIdForInitialAutoScroll: number | any = null;
 
     constructor(private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) {}
 

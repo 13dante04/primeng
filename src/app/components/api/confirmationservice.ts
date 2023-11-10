@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Confirmation } from './confirmation';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ConfirmationService {
     private requireConfirmationSource = new Subject<Confirmation>();
     private acceptConfirmationSource = new Subject<Confirmation>();

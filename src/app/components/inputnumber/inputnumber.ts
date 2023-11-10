@@ -48,6 +48,7 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
                 inputmode="decimal"
                 (input)="onUserInput($event)"
                 (keydown)="onInputKeyDown($event)"
+                (keyup)="onInputKeyUp($event)"
                 (keypress)="onInputKeyPress($event)"
                 (paste)="onPaste($event)"
                 (click)="onInputClick()"
@@ -210,6 +211,7 @@ export class InputNumber implements OnInit, ControlValueAccessor {
     @Output() onInput: EventEmitter<any> = new EventEmitter();
 
     @Output() onFocus: EventEmitter<any> = new EventEmitter();
+    @Output() onKeyUp: EventEmitter<any> = new EventEmitter();
 
     @Output() onBlur: EventEmitter<any> = new EventEmitter();
 
@@ -657,7 +659,9 @@ export class InputNumber implements OnInit, ControlValueAccessor {
 
         this.onKeyDown.emit(event);
     }
-
+    onInputKeyUp(event) {
+        this.onKeyUp.emit(event);
+    }
     onInputKeyPress(event) {
         if (this.readonly) {
             return;

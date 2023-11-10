@@ -4,7 +4,9 @@ import { DynamicDialogInjector } from './dynamicdialog-injector';
 import { DynamicDialogConfig } from './dynamicdialog-config';
 import { DynamicDialogRef } from './dynamicdialog-ref';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DialogService {
     dialogComponentRefMap: Map<DynamicDialogRef, ComponentRef<DynamicDialogComponent>> = new Map();
 

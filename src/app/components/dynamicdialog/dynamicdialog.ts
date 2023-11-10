@@ -52,7 +52,10 @@ const hideAnimation = animation([animate('{{transition}}', style({ transform: '{
                             <span class="p-dialog-header-maximize-icon" [ngClass]="maximized ? minimizeIcon : maximizeIcon"></span>
                         </button>
                         <button [ngClass]="'p-dialog-header-icon p-dialog-header-maximize p-link'" type="button" (click)="hide()" (keydown.enter)="hide()" *ngIf="config.closable !== false">
-                            <span class="p-dialog-header-close-icon pi pi-times"></span>
+                            <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0332 0.43934C12.619 1.02513 12.619 1.97487 12.0332 2.56066L8.59385 6L12.0332 9.43934C12.619 10.0251 12.619 10.9749 12.0332 11.5607C11.4474 12.1464 10.4977 12.1464 9.91187 11.5607L6.47253 8.12132L3.03319 11.5607C2.44741 12.1464 1.49766 12.1464 0.911874 11.5607C0.326088 10.9749 0.326088 10.0251 0.911874 9.43934L4.35121 6L0.911874 2.56066C0.326088 1.97487 0.326088 1.02513 0.911874 0.43934C1.49766 -0.146447 2.44741 -0.146447 3.03319 0.43934L6.47253 3.87868L9.91187 0.43934C10.4977 -0.146447 11.4474 -0.146447 12.0332 0.43934Z" fill="black"/>
+                            </svg>
+                        <!-- <span class="p-dialog-header-close-icon pi pi-times"></span> -->
                         </button>
                     </div>
                 </div>
@@ -581,7 +584,6 @@ export class DynamicDialogComponent implements AfterViewInit, OnDestroy {
 
 @NgModule({
     imports: [CommonModule],
-    declarations: [DynamicDialogComponent, DynamicDialogContent],
-    entryComponents: [DynamicDialogComponent]
+    declarations: [DynamicDialogComponent, DynamicDialogContent]
 })
 export class DynamicDialogModule {}

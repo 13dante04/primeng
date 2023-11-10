@@ -1,0 +1,197 @@
+
+<span #container [ngClass]="{ 'p-autocomplete p-component': true, 'p-autocomplete-dd': dropdown,
+'p-autocomplete-single': !multiple,
+'p-autocomplete-multiple': multiple }" [ngStyle]="style" [class]="styleClass">
+    <ul *ngIf="!multiple" [ngStyle]="{ 'background': backgroundDisabledColor}"  #sinlgeContainer class="p-autocomplete-single-container p-component p-inputtext" [ngClass]="{'p-focus': focus }" (click)="in.focus()">
+    <li class="p-autocomplete-input-token">
+        <input
+            pAutoFocus
+            [autofocus]="autofocus"
+            #in
+            [attr.type]="type"
+            [attr.id]="inputId"
+            [ngStyle]="inputStyle"
+            [class]="inputStyleClass"
+            [autocomplete]="autocomplete"
+            [attr.required]="required"
+            [attr.name]="name"
+            style="width:100%"
+            class="p-component p-autocomplete"
+            [ngClass]="{ 'p-autocomplete-dd-input': dropdown, 'p-disabled': disabled }"
+            [value]="inputFieldValue"
+            aria-autocomplete="list"
+            role="searchbox"
+            (click)="onInputClick($event)"
+            (input)="onInput($event)"
+            (keydown)="onKeydown($event)"
+            (keyup)="onKeyup($event)"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+            (change)="onInputChange($event)"
+            (paste)="onInputPaste($event)"
+            [attr.placeholder]="placeholder"
+            [attr.size]="size"
+            [attr.maxlength]="maxlength"
+            [attr.tabindex]="tabindex"
+            [readonly]="readonly"
+            [disabled]="disabled"
+            [attr.aria-label]="ariaLabel"
+            [attr.aria-labelledby]="ariaLabelledBy"
+            [attr.aria-required]="required"
+        />
+    </li>
+
+        <div class="p-trigger p-clear-trigger" role="button"
+            *ngIf="!multiple && filled && !disabled && showClear && !loading"
+            (click)="clear()"
+            [ngClass]="{'disabled': disabled}"
+            aria-label="clear trigger">
+                <span class="p-clear-trigger-icon" class="pi pi-times"></span>
+        </div>
+
+        <div class="p-trigger p-loading-trigger" role="button"
+            *ngIf="loading"
+            [ngClass]="{'disabled': disabled}"
+            aria-label="loading trigger">
+                <span class="p-loading-trigger-icon" class="pi pi-spinner pi-spin"></span>
+        </div>
+        <div class="p-trigger p-dropdown-trigger" role="button"
+            *ngIf="dropdown"
+            (click)="handleDropdownClick($event)"
+            [ngClass]="{'disabled': disabled}"
+            aria-label="dropdown trigger" aria-haspopup="listbox" [attr.aria-expanded]="overlayVisible">
+                <span class="p-dropdown-trigger-icon" [ngClass]="dropdownIcon"></span>
+        </div>
+        </ul>
+        <ul *ngIf="multiple" [ngStyle]="{ background: disabled ? '#ACACAC' : 'default' }" #multiContainer class="p-autocomplete-multiple-container p-component p-inputtext p-autocomplete" [ngClass]="{'p-focus': focus }" (click)="multiIn.focus()">
+            <li #token *ngFor="let val of value" class="p-autocomplete-token">
+                <ng-container *ngTemplateOutlet="selectedItemTemplate; context: { $implicit: val }"></ng-container>
+                <span *ngIf="!selectedItemTemplate" class="p-autocomplete-token-label">{{ resolveFieldData(val) }}</span>
+                <span class="p-autocomplete-token-icon pi pi-times-circle" (click)="removeItem(token)" *ngIf="!disabled && !readonly"></span>
+            </li>
+            <li class="p-autocomplete-input-token">
+                <input
+                    pAutoFocus
+                    [autofocus]="autofocus"
+                    #multiIn
+                    [attr.type]="type"
+                    [attr.id]="inputId"
+                    [disabled]="disabled"
+                    [attr.placeholder]="value && value.length ? null : placeholder"
+                    [attr.tabindex]="tabindex"
+                    [attr.maxlength]="maxlength"
+                    (input)="onInput($event)"
+                    (click)="onInputClick($event)"
+                    (keydown)="onKeydown($event)"
+                    [readonly]="readonly"
+                    (keyup)="onKeyup($event)"
+                    (focus)="onInputFocus($event)"
+                    (blur)="onInputBlur($event)"
+                    (change)="onInputChange($event)"
+                    (paste)="onInputPaste($event)"
+                    [autocomplete]="autocomplete"
+                    [ngStyle]="inputStyle"
+                    [class]="inputStyleClass"
+                    [attr.aria-label]="ariaLabel"
+                    [attr.aria-labelledby]="ariaLabelledBy"
+                    [attr.aria-required]="required"
+                    aria-autocomplete="list"
+                    [attr.aria-controls]="listId"
+                    role="searchbox"
+                    [attr.aria-expanded]="overlayVisible"
+                    aria-haspopup="true"
+                    [attr.aria-activedescendant]="'p-highlighted-option'"
+                />
+            </li>
+        </ul>
+        <!-- <button
+            #ddBtn
+            type="button"
+            pButton
+            [icon]="dropdownIcon"
+            [attr.aria-label]="dropdownAriaLabel"
+            class="p-autocomplete-dropdown"
+            [disabled]="disabled"
+            pRipple
+            (click)="handleDropdownClick($event)"
+            *ngIf="dropdown"
+            [attr.tabindex]="tabindex"></button> -->
+        <p-overlay
+            #overlay
+            [(visible)]="overlayVisible"
+            [options]="virtualScrollOptions"
+            [target]="'@parent'"
+            [appendTo]="appendTo"
+            [showTransitionOptions]="showTransitionOptions"
+            [hideTransitionOptions]="hideTransitionOptions"
+            (onAnimationStart)="onOverlayAnimationStart($event)"
+            (onShow)="show($event)"
+            (onHide)="hide($event)"
+        >
+            <div [ngClass]="['p-autocomplete-panel p-component']" [style.max-height]="virtualScroll ? 'auto' : scrollHeight" [ngStyle]="panelStyle" [class]="panelStyleClass">
+                <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+                <p-scroller
+                    *ngIf="virtualScroll"
+                    #scroller
+                    [items]="suggestions"
+                    [style]="{ height: scrollHeight }"
+                    [itemSize]="virtualScrollItemSize || _itemSize"
+                    [autoSize]="true"
+                    [lazy]="lazy"
+                    (onLazyLoad)="onLazyLoad.emit($event)"
+                    [options]="virtualScrollOptions"
+                >
+                    <ng-template pTemplate="content" let-items let-scrollerOptions="options">
+                        <ng-container *ngTemplateOutlet="buildInItems; context: { $implicit: items, options: scrollerOptions }"></ng-container>
+                    </ng-template>
+                    <ng-container *ngIf="loaderTemplate">
+                        <ng-template pTemplate="loader" let-scrollerOptions="options">
+                            <ng-container *ngTemplateOutlet="loaderTemplate; context: { options: scrollerOptions }"></ng-container>
+                        </ng-template>
+                    </ng-container>
+                </p-scroller>
+                <ng-container *ngIf="!virtualScroll">
+                    <ng-container *ngTemplateOutlet="buildInItems; context: { $implicit: suggestions, options: {} }"></ng-container>
+                </ng-container>
+
+                <ng-template #buildInItems let-items let-scrollerOptions="options">
+                    <ul #items role="listbox" [attr.id]="listId" class="p-autocomplete-items" [ngClass]="scrollerOptions.contentStyleClass" [style]="scrollerOptions.contentStyle">
+                        <ng-container *ngIf="group">
+                            <ng-template ngFor let-optgroup [ngForOf]="items">
+                                <li class="p-autocomplete-item-group" [ngStyle]="{ height: scrollerOptions.itemSize + 'px' }">
+                                    <span *ngIf="!groupTemplate">{{ getOptionGroupLabel(optgroup) || 'empty' }}</span>
+                                    <ng-container *ngTemplateOutlet="groupTemplate; context: { $implicit: optgroup }"></ng-container>
+                                </li>
+                                <ng-container *ngTemplateOutlet="itemslist; context: { $implicit: getOptionGroupChildren(optgroup) }"></ng-container>
+                            </ng-template>
+                        </ng-container>
+                        <ng-container *ngIf="!group">
+                            <ng-container *ngTemplateOutlet="itemslist; context: { $implicit: items }"></ng-container>
+                        </ng-container>
+                        <ng-template #itemslist let-suggestionsToDisplay>
+                            <li
+                                role="option"
+                                *ngFor="let option of suggestionsToDisplay; let idx = index"
+                                class="p-autocomplete-item"
+                                
+                                [ngStyle]="{ height: scrollerOptions.itemSize + 'px' }"
+                                [ngClass]="{ 'p-highlight': option === highlightOption }"
+                                [id]="highlightOption === option ? 'p-highlighted-option' : ''"
+                                (click)="selectItem(option)"
+                            >
+                                <span *ngIf="!itemTemplate">{{ resolveFieldData(option) }}</span>
+                                <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: option, index: scrollerOptions.getOptions ? scrollerOptions.getOptions(idx) : idx }"></ng-container>
+                            </li>
+                        </ng-template>
+                        <li *ngIf="noResults && showEmptyMessage" class="p-autocomplete-empty-message" [ngStyle]="{ height: scrollerOptions.itemSize + 'px' }">
+                            <ng-container *ngIf="!emptyTemplate; else empty">
+                                {{ emptyMessageLabel }}
+                            </ng-container>
+                            <ng-container #empty *ngTemplateOutlet="emptyTemplate"></ng-container>
+                        </li>
+                    </ul>
+                </ng-template>
+                <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
+            </div>
+        </p-overlay>
+    </span>

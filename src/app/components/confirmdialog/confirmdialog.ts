@@ -52,8 +52,8 @@ const hideAnimation = animation([animate('{{transition}}', style({ transform: '{
                 </div>
                 <div class="p-dialog-header" *ngIf="!headerTemplate">
                     <span class="p-dialog-title" *ngIf="option('header')">{{ option('header') }}</span>
-                    <div class="p-dialog-header-icons">
-                        <button *ngIf="closable" type="button" [ngClass]="{ 'p-dialog-header-icon p-dialog-header-close p-link': true }" (click)="close($event)" (keydown.enter)="close($event)">
+                    <div class="p-dialog-header-icons" *ngIf="closable">
+                        <button type="button" [ngClass]="{ 'p-dialog-header-icon p-dialog-header-close p-link': true }" (click)="close($event)" (keydown.enter)="close($event)">
                             <span class="pi pi-times"></span>
                         </button>
                     </div>
@@ -71,18 +71,6 @@ const hideAnimation = animation([animate('{{transition}}', style({ transform: '{
                         type="button"
                         pRipple
                         pButton
-                        [icon]="option('rejectIcon')"
-                        [label]="rejectButtonLabel"
-                        (click)="reject()"
-                        [ngClass]="'p-confirm-dialog-reject'"
-                        [class]="option('rejectButtonStyleClass')"
-                        *ngIf="option('rejectVisible')"
-                        [attr.aria-label]="rejectAriaLabel"
-                    ></button>
-                    <button
-                        type="button"
-                        pRipple
-                        pButton
                         [icon]="option('acceptIcon')"
                         [label]="acceptButtonLabel"
                         (click)="accept()"
@@ -90,6 +78,18 @@ const hideAnimation = animation([animate('{{transition}}', style({ transform: '{
                         [class]="option('acceptButtonStyleClass')"
                         *ngIf="option('acceptVisible')"
                         [attr.aria-label]="acceptAriaLabel"
+                    ></button>
+                    <button
+                        type="button"
+                        pRipple
+                        pButton
+                        [icon]="option('rejectIcon')"
+                        [label]="rejectButtonLabel"
+                        (click)="reject()"
+                        [ngClass]="'p-confirm-dialog-reject'"
+                        [class]="option('rejectButtonStyleClass')"
+                        *ngIf="option('rejectVisible')"
+                        [attr.aria-label]="rejectAriaLabel"
                     ></button>
                 </div>
             </div>
@@ -116,7 +116,7 @@ export class ConfirmDialog implements AfterContentInit, OnInit, OnDestroy {
 
     @Input() maskStyleClass: string;
 
-    @Input() acceptIcon: string = 'pi pi-check';
+    @Input() acceptIcon; //: string = 'pi pi-check';
 
     @Input() acceptLabel: string;
 
@@ -124,7 +124,7 @@ export class ConfirmDialog implements AfterContentInit, OnInit, OnDestroy {
 
     @Input() acceptVisible: boolean = true;
 
-    @Input() rejectIcon: string = 'pi pi-times';
+    @Input() rejectIcon: string; //  = 'pi pi-times'
 
     @Input() rejectLabel: string;
 
@@ -198,6 +198,9 @@ export class ConfirmDialog implements AfterContentInit, OnInit, OnDestroy {
                 break;
             case 'top':
                 this.transformOptions = 'translate3d(0px, -100%, 0px)';
+                break;
+            case 'top-center':
+                this.transformOptions = 'translate3d(0px, 100%, 0px)';
                 break;
             default:
                 this.transformOptions = 'scale(0.7)';
